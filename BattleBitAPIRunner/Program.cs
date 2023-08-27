@@ -400,7 +400,18 @@ namespace BattleBitAPIRunner
                         continue;
                     }
 
-                    BattleBitModule? referencedModule = battleBitModules.FirstOrDefault(m => m.GetType().Name == property.Name);
+                    BattleBitModule? referencedModule;
+
+                    if (property.PropertyType.IsAbstract)
+                    {
+	                    referencedModule = battleBitModules.FirstOrDefault(m => m.GetType()
+		                    .IsAssignableTo(property.PropertyType));
+                    }
+                    else
+                    {
+	                    referencedModule = battleBitModules.FirstOrDefault(m => m.GetType().Name == property.Name);
+                    }
+
                     if (referencedModule is null)
                     {
                         continue;
